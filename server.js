@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -6,6 +7,15 @@ const corsOptions = require('./config/corsOptions');
 const { logger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
 const PORT = process.env.PORT || 3500;
+const sequelize = require('./config/db');
+
+//DB Connection
+sequelize.authenticate().then(() => {
+    require("./model")
+    console.log('Connection has been established successfully.');
+ }).catch((error) => {
+    console.error('Unable to connect to the database: ', error);
+ });
 
 // custom middleware logger
 app.use(logger);
